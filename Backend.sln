@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{206A865D-A3C6-4498-B3FB-CF56072489D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4E5F78D-4B58-4F6E-8517-B6EC85172711}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendTest", "BackendTest\BackendTest.csproj", "{8CBCD41B-05E3-4DD7-B074-F90F2E043F78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{206A865D-A3C6-4498-B3FB-CF56072489D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{206A865D-A3C6-4498-B3FB-CF56072489D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{206A865D-A3C6-4498-B3FB-CF56072489D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{206A865D-A3C6-4498-B3FB-CF56072489D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBCD41B-05E3-4DD7-B074-F90F2E043F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBCD41B-05E3-4DD7-B074-F90F2E043F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBCD41B-05E3-4DD7-B074-F90F2E043F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBCD41B-05E3-4DD7-B074-F90F2E043F78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

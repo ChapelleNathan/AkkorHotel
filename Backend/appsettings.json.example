@@ -1,0 +1,15 @@
+{
+    "ConnectionStrings": {
+        "DevConnection": "Host=localhost;Port=5432;Username=username;Password=password;Database=dbName"
+    },
+    "AppSettings": {
+        "Token": "" 
+   },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
