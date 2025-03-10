@@ -37,7 +37,7 @@ public class AuthHelper(IConfiguration configuration)
     {
         var claims = new ClaimsIdentity();
         claims.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-        claims.AddClaim(new Claim(ClaimTypes.Sid, user.Id.ToString()));
+        claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         claims.AddClaim(new Claim(ClaimTypes.Role, user.Role.ToString()));
         return claims;
     }

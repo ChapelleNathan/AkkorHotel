@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
 using Backend.DTO;
+using Backend.Filter;
 using Backend.HttpResponse;
 using Backend.Service.HotelService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controller;
 
 [ApiController]
 [Route("/api/hotel")]
+[Authorize]
+[AdminFilter]
 public class HotelController(IMapper mapper, IHotelService hotelService)
 {
     [HttpPost]

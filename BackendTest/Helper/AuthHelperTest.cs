@@ -51,7 +51,7 @@ public class AuthHelperTest
         var jwtToken = handler.ReadJwtToken(jwt);
         Assert.NotNull(jwtToken);
         Assert.Equal(_user.Email, jwtToken.Claims.First(c => c.Type == "email").Value);
-        Assert.Equal(_user.Id.ToString(), jwtToken.Claims.First(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid").Value);
+        Assert.Equal(_user.Id.ToString(), jwtToken.Claims.First(c => c.Type == "nameid").Value);
     }
     
     [Fact]

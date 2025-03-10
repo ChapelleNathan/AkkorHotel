@@ -235,7 +235,7 @@ public class UserServiceTest : IClassFixture<DataContextTest>
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Sid, id),
+            new Claim(ClaimTypes.NameIdentifier, id),
             new Claim(ClaimTypes.Role, role.ToString()),
         };
         var identity = new ClaimsIdentity(claims);

@@ -1,25 +1,27 @@
-﻿using Backend.Models;
+﻿using Backend.Context;
+using Backend.Models;
 
 namespace Backend.Repository.HotelRepository;
 
-public class HotelRepository : IHotelRepository
+public class HotelRepository(DataContext context) : IHotelRepository
 {
-    public Hotel CreateHotel(Hotel hotel)
+    public async Task<Hotel> CreateHotel(Hotel hotel)
+    {
+        var newHotel = await context.Hotels.AddAsync(hotel);
+        return newHotel.Entity;
+    }
+
+    public Task<Hotel> GetHotelById(string id)
     {
         throw new NotImplementedException();
     }
 
-    public Hotel GetHotelById(string id)
+    public Task<IEnumerable<Hotel>> GetHotels()
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Hotel> GetHotels()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Hotel UpdateHotel(Hotel hotel)
+    public Task<Hotel> UpdateHotel(Hotel hotel)
     {
         throw new NotImplementedException();
     }
@@ -27,5 +29,10 @@ public class HotelRepository : IHotelRepository
     public Hotel DeleteHotel(string id)
     {
         throw new NotImplementedException();
+    }
+
+    public void Save()
+    {
+        context.SaveChanges();
     }
 }

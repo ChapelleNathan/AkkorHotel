@@ -36,4 +36,12 @@ public enum ErrorMessageEnum
     [Description("Le mot de passe ou l'email est incorrecte")]
     Sup401WrongCredential,
     
+    //Hotel
+    [Description("La description ne doit pas dépasser 255 caractères")]
+    Sup400TooLongHotelDescription,
+    [Description("Le nom de l'hotel ne doit pas faire plus de 50 caractères")]
+    Sup400TooLongHotelName,
+    [Description("La localisation de l'hotel ne doit pas faire plus de 50 caractères")]
+    Sup400TooLongHotelLocation,
+    
 }

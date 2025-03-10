@@ -18,6 +18,9 @@ public class HttpResponseHandler : ControllerBase
             case 401:
                 httpResponse = Unauthorized(response);
                 break;
+            case 500:
+                httpResponse = StatusCode(500, response);
+                break;
         }
 
         return httpResponse;
