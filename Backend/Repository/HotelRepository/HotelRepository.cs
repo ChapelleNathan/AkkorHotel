@@ -22,14 +22,16 @@ public class HotelRepository(DataContext context) : IHotelRepository
         return await context.Hotels.ToListAsync();
     }
 
-    public Task<Hotel> UpdateHotel(Hotel hotel)
+    public Hotel UpdateHotel(Hotel hotel)
     {
-        throw new NotImplementedException();
+        var updatedHotel = context.Hotels.Update(hotel);
+        return updatedHotel.Entity;
     }
 
-    public Hotel DeleteHotel(string id)
+    public Hotel DeleteHotel(Hotel hotel)
     {
-        throw new NotImplementedException();
+        var deletedHotel = context.Hotels.Remove(hotel);
+        return deletedHotel.Entity;
     }
 
     public void Save()

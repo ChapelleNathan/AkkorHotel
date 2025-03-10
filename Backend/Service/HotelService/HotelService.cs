@@ -40,14 +40,36 @@ public class HotelService(IHotelRepository hotelRepository, IMapper mapper) : IH
         return await hotelRepository.GetHotels();
     }
 
-    public Task<Hotel> UpdateHotel(UpdateHotelDto hotel)
+    public async Task<Hotel> UpdateHotel(UpdateHotelDto hotelDto)
     {
-        throw new NotImplementedException();
+        var hotel = await GetHotelById(hotelDto.Id.ToString());
+        if(hotel is null)
+            throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404HotelNotFound));
+        
+        hotel.Name = hotelDto.Name;
+        hotel.Description = hotelDto.Description;
+        hotel.Location = hotelDto.Location;
+        
+        VerifyHotelInput(hotel);
+        
+        var updateHotel = hotelRepository.UpdateHotel(hotel);
+        hotelRepository.Save();
+        return updateHotel;
     }
 
-    public Task<Hotel> DeleteHotel(string id)
+    public async Task<Hotel> DeleteHotel(string id)
     {
-        throw new NotImplementedException();
+        var hotel = await GetHotelById(id);
+        try
+        {
+            var deletedHotel = hotelRepository.DeleteHotel(hotel);
+            hotelRepository.Save();
+            return deletedHotel;
+        }
+        catch (Exception e)
+        {
+            throw new HttpResponseException(500, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
+        }
     }
 
     private void VerifyHotelInput(Hotel hotel)
