@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Backend.Context;
+using Backend.Enum;
 using Backend.Models;
 using Backend.Repository.UserRepository;
 using FakeItEasy;
@@ -11,7 +12,8 @@ public class DataContextTest : IDisposable
 {
     private readonly DataContext _context;
     public readonly UserRepository UserRepository;
-    public Guid UserId { get; set; }
+    public Guid UserId { get; private set; }
+    public Guid AdminId { get; private set; }
     
     public DataContextTest()
     {
@@ -30,10 +32,15 @@ public class DataContextTest : IDisposable
 
     public void SeedDb()
     {
-        var user = new User("test", "user", "test@user.com", BCrypt.Net.BCrypt.HashPassword("Password123."));
+        var user = new User("test", "user", "test@user.com", BCrypt.Net.BCrypt.HashPassword("Password123."), "defaultUser");
+        var admin = new User("admin", "test", "admin@gmail.com", BCrypt.Net.BCrypt.HashPassword("Password123."),
+            "admin", RoleEnum.Admin);
         user.Id = Guid.NewGuid();
+        admin.Id = Guid.NewGuid();
         UserId = user.Id;
+        AdminId = admin.Id;
         _context.Users.Add(user);
+        _context.Users.Add(admin);
         _context.SaveChanges();
     }
 

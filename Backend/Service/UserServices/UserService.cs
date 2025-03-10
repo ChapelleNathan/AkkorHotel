@@ -13,8 +13,8 @@ public partial class UserService(IUserRepository userRepository, IMapper mapper)
 {
     public async Task<User> CreateUser(CreateUserDto createdUser)
     {
-        var test = await userRepository.GetUserByEmail(createdUser.Email);
-        if (test is not null)
+        var isInDb = await userRepository.GetUserByEmail(createdUser.Email);
+        if (isInDb is not null)
             throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401EmailTaken));
         VerifUser(mapper.Map<User>(createdUser));
         createdUser.Password = BCrypt.Net.BCrypt.HashPassword(createdUser.Password);
@@ -30,9 +30,12 @@ public partial class UserService(IUserRepository userRepository, IMapper mapper)
             throw new HttpResponseException(500, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
         }
     }
-    
-    public async Task<User> GetUserById(string id)
+
+    public async Task<User> GetUserById(string id, AppUserDto appUserDto)
     {
+        var connectedUser = await userRepository.GetOneUserById(appUserDto.Id);
+        VerifyConnectedUser(connectedUser, id);
+        
         var user = await userRepository.GetOneUserById(id);
         if (user is null)
             throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404UserNotFound));
@@ -40,18 +43,19 @@ public partial class UserService(IUserRepository userRepository, IMapper mapper)
         return user;
     }
 
-    public async Task<User> DeleteUserById(string id)
+    public async Task<User> DeleteUserById(string id, AppUserDto appUserDto)
     {
-        var user = await GetUserById(id);
-        return mapper.Map<User>(userRepository.DeleteUserById(user));
+        var user = await GetUserById(id, appUserDto);
+        return userRepository.DeleteUserById(user);
     }
 
-    public async Task<User> UpdateUser(UpdatedUserDto updatedUserDto)
+    public async Task<User> UpdateUser(UpdatedUserDto updatedUserDto, AppUserDto appUserDto)
     {
-        var user = await GetUserById(updatedUserDto.Id);
+        var user = await GetUserById(updatedUserDto.Id, appUserDto);
         user.Lastname = updatedUserDto.Lastname;
         user.Email = updatedUserDto.Email;
         user.Firstname = updatedUserDto.Firstname;
+        user.Pseudo = updatedUserDto.Pseudo;
         VerifUser(user);
         return userRepository.UpdateUser(user);
     }
@@ -85,4 +89,13 @@ public partial class UserService(IUserRepository userRepository, IMapper mapper)
 
     [GeneratedRegex(@"(?=(.*[a-z]{1,}))(?=(.*[A-Z]{1,}))(?=(.*[0-9]{1,}))(?=(.*[!@#$%^&*()\-__+.]{1,})).{8,}")]
     private static partial Regex PasswordRegex();
+
+    private void VerifyConnectedUser(User? connectedUser, string askedUserId)
+    {
+        if (connectedUser is null)
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401NotConnected));
+        
+        if(!askedUserId.Equals(connectedUser.Id.ToString()) && !connectedUser.Role.Equals(RoleEnum.Admin))
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
+    }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Backend.DTO;
 using Backend.HttpResponse;
 using Backend.Service.UserServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controller;
@@ -11,12 +12,13 @@ namespace Backend.Controller;
 public class UserController(IUserService userService, IMapper mapper): ControllerBase
 {
     [HttpGet("{id}")]
-    public async Task<ActionResult<HttpResponse<UserDto>>> GetUser(string id)
+    [Authorize]
+    public async Task<ActionResult<HttpResponse<UserDto>>> GetUser(string id, AppUserDto user)
     {
         var httpResponse = new HttpResponse<UserDto>();
         try
         {
-            httpResponse.Response = mapper.Map<UserDto>(await userService.GetUserById(id));
+            httpResponse.Response = mapper.Map<UserDto>(await userService.GetUserById(id, user));
         }
         catch (HttpResponseException e)
         {
@@ -45,12 +47,12 @@ public class UserController(IUserService userService, IMapper mapper): Controlle
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<HttpResponse<UserDto>>> DeleteUser(string id)
+    public async Task<ActionResult<HttpResponse<UserDto>>> DeleteUser(string id, AppUserDto user)
     {
         var httpResponse = new HttpResponse<UserDto>();
         try
         {
-            httpResponse.Response = mapper.Map<UserDto>(await userService.DeleteUserById(id));
+            httpResponse.Response = mapper.Map<UserDto>(await userService.DeleteUserById(id, user));
         }
         catch (HttpResponseException e)
         {
@@ -62,12 +64,12 @@ public class UserController(IUserService userService, IMapper mapper): Controlle
     }
 
     [HttpPut("/update")]
-    public async Task<ActionResult<HttpResponse<UserDto>>> UpdateUser(UpdatedUserDto updatedUserDto)
+    public async Task<ActionResult<HttpResponse<UserDto>>> UpdateUser(UpdatedUserDto updatedUserDto, AppUserDto user)
     {
         var httpResponse = new HttpResponse<UserDto>();
         try
         {
-            httpResponse.Response = mapper.Map<UserDto>(await userService.UpdateUser(updatedUserDto));
+            httpResponse.Response = mapper.Map<UserDto>(await userService.UpdateUser(updatedUserDto, user));
         }
         catch (HttpResponseException e)
         {

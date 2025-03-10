@@ -11,6 +11,8 @@ public enum ErrorMessageEnum
     Sup500UnknownError,
     [Description("Aucune description pour cette erreur")]
     Sup500NoErrorDescription,
+    [Description("Vous n'êtes pas authorisée")]
+    Sup401NotConnected,
     
     //User
     [Description("Utilisateur Introuvable")]
