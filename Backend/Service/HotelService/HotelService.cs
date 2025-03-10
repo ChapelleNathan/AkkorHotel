@@ -27,14 +27,17 @@ public class HotelService(IHotelRepository hotelRepository, IMapper mapper) : IH
         }
     }
 
-    public Task<Hotel> GetHotelById(string id)
+    public async Task<Hotel> GetHotelById(string id)
     {
-        throw new NotImplementedException();
+        var hotel = await hotelRepository.GetHotelById(id);
+        if (hotel is null)
+            throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404HotelNotFound));
+        return hotel;
     }
 
-    public Task<List<Hotel>> GetHotels()
+    public async Task<List<Hotel>> GetHotels()
     {
-        throw new NotImplementedException();
+        return await hotelRepository.GetHotels();
     }
 
     public Task<Hotel> UpdateHotel(UpdateHotelDto hotel)

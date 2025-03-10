@@ -1,5 +1,6 @@
 ﻿using Backend.Context;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repository.HotelRepository;
 
@@ -11,14 +12,14 @@ public class HotelRepository(DataContext context) : IHotelRepository
         return newHotel.Entity;
     }
 
-    public Task<Hotel> GetHotelById(string id)
+    public async Task<Hotel?> GetHotelById(string id)
     {
-        throw new NotImplementedException();
+        return await context.Hotels.FirstOrDefaultAsync(user => user.Id.ToString().Equals(id));
     }
 
-    public Task<IEnumerable<Hotel>> GetHotels()
+    public async Task<List<Hotel>> GetHotels()
     {
-        throw new NotImplementedException();
+        return await context.Hotels.ToListAsync();
     }
 
     public Task<Hotel> UpdateHotel(Hotel hotel)

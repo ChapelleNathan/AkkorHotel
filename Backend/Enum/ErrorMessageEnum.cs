@@ -43,5 +43,7 @@ public enum ErrorMessageEnum
     Sup400TooLongHotelName,
     [Description("La localisation de l'hotel ne doit pas faire plus de 50 caractères")]
     Sup400TooLongHotelLocation,
+    [Description("L'hotel que vous cherchez est introuvable")]
+    Sup404HotelNotFound,
     
 }
