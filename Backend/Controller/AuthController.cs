@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controller;
 
 [ApiController]
-[Route("auth")]
+[Route("/api/auth")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost("/login")]

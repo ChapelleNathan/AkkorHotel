@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controller;
 
 [ApiController]
-[Route("user")]
+[Route("/api/user")]
 public class UserController(IUserService userService, IMapper mapper): ControllerBase
 {
     [HttpGet("{id}")]
@@ -63,8 +63,8 @@ public class UserController(IUserService userService, IMapper mapper): Controlle
         return new HttpResponseHandler().Handle(httpResponse);
     }
 
-    [HttpPut("/update")]
-    public async Task<ActionResult<HttpResponse<UserDto>>> UpdateUser(UpdatedUserDto updatedUserDto, AppUserDto user)
+    [HttpPut("update")]
+    public async Task<ActionResult<HttpResponse<UserDto>>> UpdateUser([FromBody]UpdatedUserDto updatedUserDto, AppUserDto user)
     {
         var httpResponse = new HttpResponse<UserDto>();
         try

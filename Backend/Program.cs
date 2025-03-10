@@ -1,8 +1,11 @@
 using System.Text;
 using Backend.Context;
+using Backend.DTO;
 using Backend.Helper;
+using Backend.Repository.HotelRepository;
 using Backend.Repository.UserRepository;
 using Backend.Service.AuthService;
+using Backend.Service.HotelService;
 using Backend.Service.UserServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -60,6 +63,9 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
+//AppUser
+builder.Services.AddTransient<AppUserDto>();
+
 //User
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -67,6 +73,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 //Auth
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<AuthHelper>();
+
+//Hotel
+builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 
 var app = builder.Build();
 
