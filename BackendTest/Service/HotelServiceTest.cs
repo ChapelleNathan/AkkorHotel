@@ -146,6 +146,45 @@ public class HotelServiceTest : IClassFixture<DataContextTest>
         Assert.Equal(exception.Message, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
     }
 
+    [Fact]
+    private async Task DeleteHotel_Test()
+    {
+        var createHotelDto = CreateRandomHotel();
+        var hotel = await _hotelService.CreateHotel(createHotelDto);
+        Assert.NotNull(hotel);
+        
+        var deletedHotel = await _hotelService.DeleteHotel(hotel.Id.ToString());
+        Assert.NotNull(deletedHotel);
+        Assert.True(deletedHotel.Id.Equals(hotel.Id));
+        
+        var exception = await Assert.ThrowsAsync<HttpResponseException>(() => _hotelService.DeleteHotel(hotel.Id.ToString()));
+        Assert.True(exception.StatusCode.Equals(404));
+        Assert.Equal(exception.Message, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404HotelNotFound));
+    }
+
+    [Fact]
+    private async Task DeleteHotel_UnexpectedError_Test()
+    {
+        var createHotelDto = CreateRandomHotel();
+        var hotel = await _hotelService.CreateHotel(createHotelDto);
+        
+        A.CallTo(() => _fakeHotelRepository.DeleteHotel(A<Hotel>._)).Throws<Exception>();
+        
+        var exception =
+            await Assert.ThrowsAsync<HttpResponseException>(() => _fakeHotelService.DeleteHotel(hotel.Id.ToString()));
+        Assert.True(exception.StatusCode.Equals(500));
+        Assert.Equal(exception.Message, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
+    }
+
+    [Fact]
+    private async Task DeletHotel_HotelNotFound_Test()
+    {
+        A.CallTo(() => _fakeHotelRepository.GetHotelById(A<string>._)).Returns((Hotel)null);
+        var exception = await Assert.ThrowsAsync<HttpResponseException>(() => _hotelService.DeleteHotel(Guid.NewGuid().ToString()));
+        Assert.True(exception.StatusCode.Equals(404));
+        Assert.Equal(exception.Message, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404HotelNotFound));
+    }
+
     private CreateHotelDto CreateRandomHotel()
     {
         return new CreateHotelDto
@@ -166,5 +205,4 @@ public class HotelServiceTest : IClassFixture<DataContextTest>
             Description = _faker.Lorem.Sentence(),
         };
     }
-    
 }

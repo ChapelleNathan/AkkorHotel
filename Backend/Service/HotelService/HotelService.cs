@@ -80,7 +80,7 @@ public class HotelService(IHotelRepository hotelRepository, IMapper mapper) : IH
 
     private void VerifyHotelInput(Hotel hotel)
     {
-        if (hotel.Description.Length > 255)
+        if (hotel.Description?.Length > 255)
             throw new HttpResponseException(400,
                 ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup400TooLongHotelDescription));
         if (hotel.Name.Length > 50)
