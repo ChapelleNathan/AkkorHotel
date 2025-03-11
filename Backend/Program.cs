@@ -45,7 +45,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "localhost", policy =>
     {
-        policy.WithOrigins("http://localhost:8000")
+        policy.WithOrigins("http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -88,7 +88,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors();
+app.UseCors("localhost");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
