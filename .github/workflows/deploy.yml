@@ -1,0 +1,38 @@
+﻿name: Auto Merge Dev to Master
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types:
+      - closed  # Se déclenche lorsque la PR est fermée
+
+jobs:
+  merge_dev_to_master:
+    if: github.event.pull_request.merged == true  # Vérifie si la PR a bien été fusionnée
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Nécessaire pour récupérer tout l'historique du dépôt
+
+      - name: Configurer Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fusionner dev dans master
+        run: |
+          git checkout master
+          git pull origin master
+          git merge origin/dev --no-ff -m "Auto-merge dev into master"
+          git push https://x-access-token:${{ secrets.PAT }}@github.com/ChapelleNathan/4CITE.git master
+
+
+      - name: Nettoyage
+        run: git checkout dev  # Revenir sur dev à la fin
