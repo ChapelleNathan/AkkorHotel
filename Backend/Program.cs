@@ -2,9 +2,11 @@ using System.Text;
 using Backend.Context;
 using Backend.DTO;
 using Backend.Helper;
+using Backend.Repository.BookingRepository;
 using Backend.Repository.HotelRepository;
 using Backend.Repository.UserRepository;
 using Backend.Service.AuthService;
+using Backend.Service.BookingService;
 using Backend.Service.HotelService;
 using Backend.Service.UserServices;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +79,10 @@ builder.Services.AddSingleton<AuthHelper>();
 //Hotel
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+
+//Booking
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 var app = builder.Build();
 

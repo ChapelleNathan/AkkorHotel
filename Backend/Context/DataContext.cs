@@ -10,6 +10,7 @@ public class DataContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Hotel> Hotels => Set<Hotel>();
+    public DbSet<Booking> Bookings => Set<Booking>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
