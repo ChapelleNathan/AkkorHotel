@@ -11,9 +11,9 @@ export default function Login() {
 
     const connect = async (event: FormEvent) => {
         event.preventDefault();
-        let connecUserDto: ConnectUserDto = new ConnectUserDto(email, password);
+        let connectUserDto: ConnectUserDto = new ConnectUserDto(email, password);
         try {
-            const jwt = (await axios.post('http://localhost:8080/login', connecUserDto)).data.response as string
+            const jwt = (await axios.post('http://localhost:8080/login', connectUserDto)).data.response as string 
             localStorage.setItem('bearer', jwt);
             navigate('/');
         } catch (error) {
@@ -27,11 +27,11 @@ export default function Login() {
             <Form className="col-4 offset-4 d-flex flex-column align-items-center" onSubmit={connect}>
                 <FormGroup className="col-12">
                     <FormLabel>Email</FormLabel>
-                    <FormControl type="text" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+                    <FormControl className="cy-email" type="text" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
                     <FormLabel>Mot de Passe</FormLabel>
-                    <FormControl  type="password" placeholder="Mot de Passe" onChange={e => setPassword(e.target.value)}/>
+                    <FormControl  className="cy-password" type="password" placeholder="Mot de Passe" onChange={e => setPassword(e.target.value)}/>
                 </FormGroup>
-                <Button className="mt-2" type="submit" variant="primary">Se connecter</Button>
+                <Button className="mt-2 cy-button" type="submit" variant="primary">Se connecter</Button>
             </Form>
         </>
     )
