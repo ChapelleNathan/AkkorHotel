@@ -18,17 +18,17 @@ jobs:
       
       # Solution principale
       - name: Restore dependencies for main solution
-        run: dotnet restore Backend/*.sln
+        run: dotnet restore Backend/Backend.sln
 
       - name: Build main solution
-        run: dotnet build Backend.sln --no-restore -c Release
+        run: dotnet build Backend/Backend.sln --no-restore -c Release
       
       # Solution de tests
       - name: Restore dependencies for test solution
-        run: dotnet restore BackendTest/*.sln
+        run: dotnet restore BackendTest/BackendTest.sln
 
       - name: Run tests
-        run: dotnet test BackendTest/*.sln --no-restore --verbosity normal -c Release
+        run: dotnet test BackendTest/BackendTest.sln --no-restore --verbosity normal -c Release
 
   build-frontend:
     runs-on: ubuntu-latest
