@@ -6,6 +6,7 @@ export default function Counter(): JSX.Element {
   return (
     <div>
       <h2>Compteur: {count}</h2>
+        <h3>Bonjour</h3>
       <button onClick={() => setCount(count + 1)}>Incrémenter</button>
       <button onClick={() => setCount(count - 1)}>Décrémenter</button>
     </div>
