@@ -39,7 +39,7 @@ public class BookingService(
         var booking = await bookingRepository.GetBookingById(id);
         if (booking is null)
             throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
-        VerifyUser(id, appUser);
+        VerifyUser(booking.User.Id.ToString(), appUser);
 
 
         return booking;
@@ -59,7 +59,7 @@ public class BookingService(
         if(booking is null)
             throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
         
-        booking.ReservationDate = DateTime.Now.AddYears(5).ToUniversalTime();
+        booking.ReservationDate = bookingDto.ReservationDate.ToUniversalTime();
 
         try
         {
@@ -73,9 +73,19 @@ public class BookingService(
         }
     }
 
-    public Task<Booking> DeleteBooking(string id, AppUserDto appUser)
+    public async Task<Booking> DeleteBooking(string id, AppUserDto appUser)
     {
-        throw new NotImplementedException();
+        var booking = await GetBookingById(id, appUser);
+        try
+        {
+            booking = bookingRepository.DeleteBooking(booking);
+            bookingRepository.Save();
+            return booking;
+        }
+        catch (Exception e)
+        {
+            throw new HttpResponseException(500, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
+        }
     }
 
     private void VerifyUser(string id, AppUserDto appUser)

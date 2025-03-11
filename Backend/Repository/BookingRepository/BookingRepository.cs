@@ -41,6 +41,7 @@ public class BookingRepository(DataContext context) : IBookingRepository
 
     public Booking DeleteBooking(Booking booking)
     {
-        throw new NotImplementedException();
+        var deletedBooking = context.Bookings.Remove(booking);
+        return deletedBooking.Entity;
     }
 }
