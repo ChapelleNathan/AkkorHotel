@@ -49,5 +49,7 @@ public enum ErrorMessageEnum
     //Booking
     [Description("Réservation introuvable")]
     Sup404BookingNotFound,
+    [Description("Impossible de créer un réservation dans le passé")]
+    Sup401BookinPast,
     
 }

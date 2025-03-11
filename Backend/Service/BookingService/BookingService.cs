@@ -18,6 +18,9 @@ public class BookingService(
 {
     public async Task<Booking> CreateBooking(CreateBookingDto bookingDto, AppUserDto appUser)
     {
+        if (bookingDto.ReservationDate < DateTime.Now)
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401BookinPast));
+        
         var user = await userService.GetUserById(bookingDto.UserId, appUser);
         var hotel = await hotelService.GetHotelById(bookingDto.HotelId);
         var booking = new Booking(user, hotel, bookingDto.ReservationDate);
@@ -40,7 +43,7 @@ public class BookingService(
         if (booking is null)
             throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
         VerifyUser(booking.User.Id.ToString(), appUser);
-
+        
 
         return booking;
     }
@@ -49,7 +52,8 @@ public class BookingService(
     {
         VerifyUser(id, appUser);
 
-        return  await bookingRepository.GetBookingsByUserId(id);
+        var bookings = await bookingRepository.GetBookingsByUserId(id);
+        return bookings;
     }
 
     public async Task<Booking> UpdateBooking(UpdateBookingDto bookingDto, AppUserDto appUser)
