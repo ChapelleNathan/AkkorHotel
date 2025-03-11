@@ -17,7 +17,7 @@ namespace BackendTest.Service;
 public class UserServiceTest : IClassFixture<DataContextTest>
 {
     private readonly IUserService _userService, _fakedUserService;
-    private readonly IUserRepository _fakeUserRepository;
+    private readonly IUserRepository _fakeUserRepository = A.Fake<IUserRepository>();
     private readonly DataContextTest _context;
     private readonly ITestOutputHelper _output;
     
@@ -26,7 +26,6 @@ public class UserServiceTest : IClassFixture<DataContextTest>
     
     public UserServiceTest(DataContextTest context, ITestOutputHelper output)
     {
-        _fakeUserRepository = A.Fake<IUserRepository>();
         var mapperConfig = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<CreateUserDto, User>();

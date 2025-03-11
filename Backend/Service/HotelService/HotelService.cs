@@ -43,18 +43,24 @@ public class HotelService(IHotelRepository hotelRepository, IMapper mapper) : IH
     public async Task<Hotel> UpdateHotel(UpdateHotelDto hotelDto)
     {
         var hotel = await GetHotelById(hotelDto.Id.ToString());
-        if(hotel is null)
-            throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404HotelNotFound));
         
         hotel.Name = hotelDto.Name;
         hotel.Description = hotelDto.Description;
         hotel.Location = hotelDto.Location;
         
         VerifyHotelInput(hotel);
+
+        try
+        {
+            var updateHotel = hotelRepository.UpdateHotel(hotel);
+            hotelRepository.Save();
+            return updateHotel;
+        }
+        catch (Exception e)
+        {
+            throw new HttpResponseException(500, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
+        }
         
-        var updateHotel = hotelRepository.UpdateHotel(hotel);
-        hotelRepository.Save();
-        return updateHotel;
     }
 
     public async Task<Hotel> DeleteHotel(string id)
@@ -79,7 +85,7 @@ public class HotelService(IHotelRepository hotelRepository, IMapper mapper) : IH
                 ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup400TooLongHotelDescription));
         if (hotel.Name.Length > 50)
             throw new HttpResponseException(400, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup400TooLongHotelName));
-        if (hotel.Location.Length > 50)
+        if (hotel.Location.Length > 100)
             throw new HttpResponseException(400, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup400TooLongHotelLocation));
     }
 }
