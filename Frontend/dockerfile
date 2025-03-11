@@ -1,0 +1,35 @@
+# Étape 1 : Construction de l'application
+FROM node:18 AS build
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers package.json et package-lock.json
+COPY package.json .
+
+# Installer les dépendances
+RUN npm install
+
+# Copier le reste des fichiers de l'application
+COPY . .
+
+# Construire l'application pour la production
+RUN npm run build
+
+# Étape 2 : Serveur de production
+FROM node:18 AS production
+
+# Installer un simple serveur HTTP pour servir l'application
+RUN npm install -g serve
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers construits depuis l'étape de build
+COPY --from=build /app/dist ./dist
+
+# Exposer le port 5173
+EXPOSE 5173
+
+# Lancer le serveur avec l'application construite
+CMD ["serve", "-s", "dist", "-l", "5173"]

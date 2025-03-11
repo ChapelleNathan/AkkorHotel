@@ -12,9 +12,38 @@
       - "5432:5432"
     networks:
       - db
+    
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      DB_CONNECTION_STRING: Host=postgres;Port=5432;Username=${DB_USERNAME};Password=${DB_PASSWORD};Database=${DB_NAME}
+      ASPNETCORE_URLS: http://+:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - db
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - app
 
 networks:
   db:
+    driver: bridge
+  app:
     driver: bridge
 
 volumes:

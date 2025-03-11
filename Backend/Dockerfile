@@ -1,23 +1,30 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+﻿# Utiliser l'image SDK pour la compilation et la restauration des packages
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["Backend/Backend.csproj", "Backend/"]
-RUN dotnet restore "Backend/Backend.csproj"
-COPY . .
-WORKDIR "/src/Backend"
-RUN dotnet build "Backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Backend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Backend.dll"]
+
+# Copier les fichiers .csproj et restaurer les dépendances
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copier le reste des fichiers de l'application
+COPY . .
+
+# Construire l'application en mode Release
+RUN dotnet publish -c Release -o /out
+
+# Utiliser une image runtime pour exécuter l'application
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers publiés depuis l'étape de build
+COPY --from=build /out .
+
+# Exposer le port 8080
+EXPOSE 8080
+
+# Démarrer l'application
+CMD ["dotnet", "Backend.dll"]
