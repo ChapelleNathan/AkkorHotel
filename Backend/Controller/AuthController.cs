@@ -1,5 +1,4 @@
-using AutoMapper;
-using Backend.DTO;
+﻿using Backend.DTO;
 using Backend.HttpResponse;
 using Backend.Service.AuthService;
 using Microsoft.AspNetCore.Mvc;
@@ -7,24 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controller;
 
 [ApiController]
-[Route("/api/auth")]
+[Route("api")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
-    [HttpPost("/login")]
+    [HttpPost("login")]
     public async Task<ActionResult<HttpResponse<string>>> Login(ConnectUserDto userDto)
     {
-        var httpResponse = new HttpResponse<string>();
+        var response = new HttpResponse<string>();
 
         try
         {
-            httpResponse.Response = await authService.Login(userDto);
+            response.Response = await authService.Login(userDto);
         }
         catch (HttpResponseException e)
         {
-            httpResponse.HttpCode = e.StatusCode;
-            httpResponse.ErrorMessage = e.Message;
+            response.HttpCode = e.StatusCode;
+            response.ErrorMessage = e.Message;
         }
-        
-        return new HttpResponseHandler().Handle(httpResponse);
-    }
+
+        return new HttpResponseHandler().Handle(response);
+    } 
 }
