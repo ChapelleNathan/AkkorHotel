@@ -35,7 +35,8 @@ public class BookingRepository(DataContext context) : IBookingRepository
 
     public Booking UpdateBooking(Booking booking)
     {
-        throw new NotImplementedException();
+        var updatedBooking = context.Bookings.Update(booking);
+        return updatedBooking.Entity;
     }
 
     public Booking DeleteBooking(Booking booking)

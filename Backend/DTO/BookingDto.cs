@@ -10,12 +10,12 @@ public class BookingDto
 
 public class CreateBookingDto
 {
-    public string UserId { get; set; }
-    public string HotelId { get; set; }
+    public string UserId { get;  init; }
+    public string HotelId { get;  init; }
     public DateTime ReservationDate { get; set; }
 }
 
-public class UpdateBookingDto
+public class UpdateBookingDto : CreateBookingDto
 {
-    public required DateTime ReservationDate { get; set; }
+    public Guid Id { get;  init; }
 }

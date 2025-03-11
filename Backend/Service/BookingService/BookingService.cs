@@ -5,8 +5,6 @@ using Backend.Helper;
 using Backend.Models;
 using Backend.Repository.BookingRepository;
 using Backend.HttpResponse;
-using Backend.Repository.HotelRepository;
-using Backend.Repository.UserRepository;
 using Backend.Service.HotelService;
 using Backend.Service.UserServices;
 
@@ -41,28 +39,48 @@ public class BookingService(
         var booking = await bookingRepository.GetBookingById(id);
         if (booking is null)
             throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
+        VerifyUser(id, appUser);
 
-        if (!booking.User.Id.ToString().Equals(appUser.Id) || !appUser.Role.Equals(RoleEnum.Admin.ToString()))
-            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
 
         return booking;
     }
 
     public async Task<List<Booking>> GetBookingsByUserId(string id, AppUserDto appUser)
     {
-        if (!appUser.Id.Equals(id) && !appUser.Role.Equals(RoleEnum.Admin.ToString()))
-            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
+        VerifyUser(id, appUser);
 
         return  await bookingRepository.GetBookingsByUserId(id);
     }
 
-    public Task<Booking> UpdateBooking(UpdateBookingDto bookingDto, AppUserDto appUser)
+    public async Task<Booking> UpdateBooking(UpdateBookingDto bookingDto, AppUserDto appUser)
     {
-        throw new NotImplementedException();
+        VerifyUser(bookingDto.UserId, appUser);
+        var booking = await bookingRepository.GetBookingById(bookingDto.Id.ToString());
+        if(booking is null)
+            throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
+        
+        booking.ReservationDate = DateTime.Now.AddYears(5).ToUniversalTime();
+
+        try
+        {
+            booking = bookingRepository.UpdateBooking(booking);
+            bookingRepository.Save();
+            return booking;
+        }
+        catch (Exception e)
+        {
+            throw new HttpResponseException(500, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup500UnknownError));
+        }
     }
 
     public Task<Booking> DeleteBooking(string id, AppUserDto appUser)
     {
         throw new NotImplementedException();
+    }
+
+    private void VerifyUser(string id, AppUserDto appUser)
+    {
+        if (!appUser.Id.Equals(id) && !appUser.Role.Equals(RoleEnum.Admin.ToString()))
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
     }
 }

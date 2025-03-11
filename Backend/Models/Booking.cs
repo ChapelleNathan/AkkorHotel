@@ -20,11 +20,11 @@ public class Booking
 
     [Column("user_id")]
     [Required]
-    public User User { get; set; }
+    public User User { get; private set; }
 
     [Column("hotel_id")]
     [Required]
-    public Hotel Hotel { get; set; }
+    public Hotel Hotel { get; private set; }
     
     [Column("reservation_date")]
     public DateTime ReservationDate { get; set; }
