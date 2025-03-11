@@ -30,3 +30,14 @@ export class CreateUserDto {
         this.password = password;
     }
 }
+
+export class ConnectUserDto {
+
+    email:string
+    password: string
+
+    constructor(email: string, password: string) {
+        this.email = email;
+        this.password = password;
+    }
+}

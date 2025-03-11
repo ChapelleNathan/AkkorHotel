@@ -5,7 +5,8 @@ import App from './App.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import Header from './components/header/Header.tsx'
 import 'bootstrap/dist/css/bootstrap.css';
-import Login from './pages/Register/Register.tsx'
+import Register from './pages/Auth/Register.tsx'
+import Login from './pages/Auth/Login.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
       <Header/>
       <Routes>
         <Route path='' element={<App/>}/>
+        <Route path='register' element={<Register/>}/>
         <Route path='login' element={<Login/>}/>
       </Routes>
     </BrowserRouter>

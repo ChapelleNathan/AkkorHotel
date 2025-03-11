@@ -18,7 +18,7 @@ export default function Register() {
         let createUserDto: CreateUserDto = new CreateUserDto(fistname, lastname, pseudo, email, password);
         try {
             (await axios.post('http://localhost:8080/api/user', createUserDto)).data as UserDto;
-            navigate('/')
+            navigate('/login')
         } catch (error) {
             console.log(error);
         }
@@ -26,9 +26,9 @@ export default function Register() {
 
     return (
         <>
-            <h1 className="text-center">Connexion</h1>
-            <Form className="col-4 offset-4" onSubmit={createUser}>
-                <FormGroup>
+            <h1 className="text-center">Inscription</h1>
+            <Form className="col-4 offset-4 d-flex flex-column align-items-center" onSubmit={createUser}>
+                <FormGroup className="col-12">
                     <FormLabel>Nom</FormLabel>
                     <FormControl type="text" placeholder="Nom" onChange={e => setLastName(e.target.value)}/>
                     <FormLabel>Prénom</FormLabel>
@@ -40,7 +40,7 @@ export default function Register() {
                     <FormLabel>Mot de Passe</FormLabel>
                     <FormControl type="password" placeholder="mot de passe" onChange={e => setPassword(e.target.value)}/>
                 </FormGroup>
-                <Button variant="primary" type="submit">S'inscrire</Button>
+                <Button className="mt-2" variant="primary" type="submit">S'inscrire</Button>
             </Form>
         </>
     )
