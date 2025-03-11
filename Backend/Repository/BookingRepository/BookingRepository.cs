@@ -1,17 +1,19 @@
-﻿using Backend.Models;
+﻿using Backend.Context;
+using Backend.Models;
 
 namespace Backend.Repository.BookingRepository;
 
-public class BookingRepository : IBookingRepository
+public class BookingRepository(DataContext context) : IBookingRepository
 {
     public void Save()
     {
-        throw new NotImplementedException();
+        context.SaveChanges();
     }
 
-    public Task<Booking> CreateBooking(Booking booking)
+    public async Task<Booking> CreateBooking(Booking booking)
     {
-        throw new NotImplementedException();
+        var newBook = await context.AddAsync(booking);
+        return newBook.Entity;
     }
 
     public Task<Booking?> GetBookingById(string bookingId)

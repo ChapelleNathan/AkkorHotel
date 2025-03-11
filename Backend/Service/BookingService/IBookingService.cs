@@ -5,9 +5,9 @@ namespace Backend.Service.BookingService;
 
 public interface IBookingService
 {
-    public Task<Booking> CreateBooking(CreateBookingDto booking);
-    public Task<Booking> GetBookingById(string id);
-    public Task<List<Booking>> GetBookings();
-    public Task<Booking> UpdateBooking(UpdateBookingDto booking);
-    public Task<Booking> DeleteBooking(string id);
+    public Task<Booking> CreateBooking(CreateBookingDto bookingDto, AppUserDto appUser);
+    public Task<Booking> GetBookingById(string id, AppUserDto appUser);
+    public Task<List<Booking>> GetBookings(AppUserDto appUser);
+    public Task<Booking> UpdateBooking(UpdateBookingDto bookingDto, AppUserDto appUser);
+    public Task<Booking> DeleteBooking(string id, AppUserDto appUser);
 }

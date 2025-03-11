@@ -13,13 +13,13 @@ namespace Backend.Controller;
 public class BookingController(IBookingService bookingService, IMapper mapper) : ControllerBase
 {
     [HttpPost]
-    public async Task<ActionResult<HttpResponse<BookingDto>>> CreateBooking(CreateBookingDto createBookingDto)
+    public async Task<ActionResult<HttpResponse<BookingDto>>> CreateBooking(CreateBookingDto createBookingDto, AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<BookingDto>();
 
         try
         {
-            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.CreateBooking(createBookingDto));
+            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.CreateBooking(createBookingDto, appUserDto));
         }
         catch (HttpResponseException e)
         {
@@ -31,13 +31,13 @@ public class BookingController(IBookingService bookingService, IMapper mapper) :
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<HttpResponse<BookingDto>>> GetBooking(string id)
+    public async Task<ActionResult<HttpResponse<BookingDto>>> GetBooking(string id, AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<BookingDto>();
 
         try
         {
-            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.GetBookingById(id));
+            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.GetBookingById(id, appUserDto));
         }
         catch (HttpResponseException e)
         {
@@ -49,13 +49,13 @@ public class BookingController(IBookingService bookingService, IMapper mapper) :
     }
 
     [HttpGet]
-    public async Task<ActionResult<HttpResponse<List<BookingDto>>>> GetBookings()
+    public async Task<ActionResult<HttpResponse<List<BookingDto>>>> GetBookings(AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<List<BookingDto>>();
 
         try
         {
-            var bookings = await bookingService.GetBookings();
+            var bookings = await bookingService.GetBookings(appUserDto);
             httpResponse.Response = bookings.Select(mapper.Map<BookingDto>).ToList();
         }
         catch (HttpResponseException e)
@@ -68,13 +68,13 @@ public class BookingController(IBookingService bookingService, IMapper mapper) :
     }
 
     [HttpPut]
-    public async Task<ActionResult<HttpResponse<BookingDto>>> UpdateBooking(UpdateBookingDto updateBookingDto)
+    public async Task<ActionResult<HttpResponse<BookingDto>>> UpdateBooking(UpdateBookingDto updateBookingDto, AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<BookingDto>();
 
         try
         {
-            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.UpdateBooking(updateBookingDto));
+            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.UpdateBooking(updateBookingDto, appUserDto));
         }
         catch (HttpResponseException e)
         {
@@ -86,13 +86,13 @@ public class BookingController(IBookingService bookingService, IMapper mapper) :
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<HttpResponse<BookingDto>>> DeleteBooking(string id)
+    public async Task<ActionResult<HttpResponse<BookingDto>>> DeleteBooking(string id, AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<BookingDto>();
 
         try
         {
-            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.DeleteBooking(id));
+            httpResponse.Response = mapper.Map<BookingDto>(await bookingService.DeleteBooking(id, appUserDto));
         }
         catch (HttpResponseException e)
         {
