@@ -46,4 +46,8 @@ public enum ErrorMessageEnum
     [Description("L'hotel que vous cherchez est introuvable")]
     Sup404HotelNotFound,
     
+    //Booking
+    [Description("Réservation introuvable")]
+    Sup404BookingNotFound,
+    
 }

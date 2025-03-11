@@ -36,14 +36,24 @@ public class BookingService(
         }
     }
 
-    public Task<Booking> GetBookingById(string id, AppUserDto appUser)
+    public async Task<Booking> GetBookingById(string id, AppUserDto appUser)
     {
-        throw new NotImplementedException();
+        var booking = await bookingRepository.GetBookingById(id);
+        if (booking is null)
+            throw new HttpResponseException(404, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404BookingNotFound));
+
+        if (!booking.User.Id.ToString().Equals(appUser.Id) || !appUser.Role.Equals(RoleEnum.Admin.ToString()))
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
+
+        return booking;
     }
 
-    public Task<List<Booking>> GetBookings(AppUserDto appUser)
+    public async Task<List<Booking>> GetBookingsByUserId(string id, AppUserDto appUser)
     {
-        throw new NotImplementedException();
+        if (!appUser.Id.Equals(id) && !appUser.Role.Equals(RoleEnum.Admin.ToString()))
+            throw new HttpResponseException(401, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup401Authorization));
+
+        return  await bookingRepository.GetBookingsByUserId(id);
     }
 
     public Task<Booking> UpdateBooking(UpdateBookingDto bookingDto, AppUserDto appUser)

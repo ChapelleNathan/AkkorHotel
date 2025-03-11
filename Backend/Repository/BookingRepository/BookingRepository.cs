@@ -1,5 +1,6 @@
 ﻿using Backend.Context;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repository.BookingRepository;
 
@@ -12,18 +13,24 @@ public class BookingRepository(DataContext context) : IBookingRepository
 
     public async Task<Booking> CreateBooking(Booking booking)
     {
-        var newBook = await context.AddAsync(booking);
+        var newBook = await context.Bookings.AddAsync(booking);
         return newBook.Entity;
     }
 
-    public Task<Booking?> GetBookingById(string bookingId)
+    public async Task<Booking?> GetBookingById(string bookingId)
     {
-        throw new NotImplementedException();
+        return await context.Bookings.Where(b => b.Id.ToString().Equals(bookingId))
+            .Include(b => b.User)
+            .Include(b => b.Hotel)
+            .FirstOrDefaultAsync();
     }
 
-    public Task<List<Booking>> GetBookings()
+    public async Task<List<Booking>> GetBookingsByUserId(string userId)
     {
-        throw new NotImplementedException();
+        return await context.Bookings.Where(b => b.Id.ToString().Equals(userId))
+            .Include(b => b.User)
+            .Include(b => b.Hotel)
+            .ToListAsync();
     }
 
     public Booking UpdateBooking(Booking booking)

@@ -48,14 +48,14 @@ public class BookingController(IBookingService bookingService, IMapper mapper) :
         return new HttpResponseHandler().Handle(httpResponse);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<HttpResponse<List<BookingDto>>>> GetBookings(AppUserDto appUserDto)
+    [HttpGet("user/{id}")]
+    public async Task<ActionResult<HttpResponse<List<BookingDto>>>> GetBookings(string id, AppUserDto appUserDto)
     {
         var httpResponse = new HttpResponse<List<BookingDto>>();
 
         try
         {
-            var bookings = await bookingService.GetBookings(appUserDto);
+            var bookings = await bookingService.GetBookingsByUserId(id, appUserDto);
             httpResponse.Response = bookings.Select(mapper.Map<BookingDto>).ToList();
         }
         catch (HttpResponseException e)
