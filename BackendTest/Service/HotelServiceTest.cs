@@ -94,9 +94,9 @@ public class HotelServiceTest : IClassFixture<DataContextTest>
     [Fact]
     private async Task GetHotel_Test()
     {
-        var hotel = await _hotelService.GetHotelById(_context.HotelId.ToString());
+        var hotel = await _hotelService.GetHotelById(_context.Hotel.Id.ToString());
         Assert.NotNull(hotel);
-        Assert.True(hotel.Id.Equals(_context.HotelId));
+        Assert.True(hotel.Id.Equals(_context.Hotel.Id));
     }
 
     [Fact]
@@ -139,7 +139,7 @@ public class HotelServiceTest : IClassFixture<DataContextTest>
     private async Task UpdateHotel_UnexpectedError_Test()
     {
         var updateHotelDto = UpdateRandomHotel();
-        updateHotelDto.Id = _context.HotelId;
+        updateHotelDto.Id = _context.Hotel.Id;
         A.CallTo(() => _fakeHotelRepository.UpdateHotel(A<Hotel>._)).Throws<Exception>();
         var exception = await Assert.ThrowsAsync<HttpResponseException>(() => _fakeHotelService.UpdateHotel(updateHotelDto));
         Assert.True(exception.StatusCode.Equals(500));
@@ -199,7 +199,7 @@ public class HotelServiceTest : IClassFixture<DataContextTest>
     {
         return new UpdateHotelDto
         {
-            Id = _context.HotelId,
+            Id = _context.Hotel.Id,
             Name = _faker.Company.CompanyName(),
             Location = _faker.Address.FullAddress(),
             Description = _faker.Lorem.Sentence(),

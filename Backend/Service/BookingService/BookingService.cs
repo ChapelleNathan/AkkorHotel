@@ -18,7 +18,7 @@ public class BookingService(
 {
     public async Task<Booking> CreateBooking(CreateBookingDto bookingDto, AppUserDto appUser)
     {
-        var user = await userService.GetUserById(appUser.Id, appUser);
+        var user = await userService.GetUserById(bookingDto.UserId, appUser);
         var hotel = await hotelService.GetHotelById(bookingDto.HotelId);
         var booking = new Booking(user, hotel, bookingDto.ReservationDate);
         

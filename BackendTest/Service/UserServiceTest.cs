@@ -186,7 +186,7 @@ public class UserServiceTest : IClassFixture<DataContextTest>
     [Fact]
     public async Task GetUserById_NotFound_Test()
     {
-        var appAdminDto = CreateFakeAppUserDto("admin@gmail.com", _context.AdminId.ToString(), RoleEnum.Admin);
+        var appAdminDto = CreateFakeAppUserDto("admin@gmail.com", _context.Admin.Id.ToString(), RoleEnum.Admin);
         
         await Assert.ThrowsAsync<HttpResponseException>(() => _userService.GetUserById(Guid.NewGuid().ToString(), appAdminDto));
     }
@@ -195,16 +195,16 @@ public class UserServiceTest : IClassFixture<DataContextTest>
     [InlineData("john", "doe", "updateUserTest@doe.com", "Password123.", "doejohn")]
     public async Task UpdateUser_Test(string firstname, string lastname, string email, string password, string pseudo)
     {
-        var appUserDto = CreateFakeAppUserDto(email, _context.UserId.ToString(), RoleEnum.User);
+        var appUserDto = CreateFakeAppUserDto(email, _context.User.Id.ToString(), RoleEnum.User);
         
-        var user = await _userService.GetUserById(_context.UserId.ToString(), appUserDto);
+        var user = await _userService.GetUserById(_context.User.Id.ToString(), appUserDto);
         var originalFirstname = user.Firstname;
         var originalLastname = user.Lastname;
         var originalEmail = user.Email;
         var originalPassword = user.Password;
         var originalPseudo = user.Pseudo;
         
-        var updatedUser = new UpdatedUserDto{Firstname = firstname, Email = email, Lastname = lastname, Password = password, Id = _context.UserId.ToString(), Pseudo = pseudo};
+        var updatedUser = new UpdatedUserDto{Firstname = firstname, Email = email, Lastname = lastname, Password = password, Id = _context.User.Id.ToString(), Pseudo = pseudo};
         var updatedUserDto = await _userService.UpdateUser(updatedUser, appUserDto);
         
         Assert.NotEqual(originalFirstname, updatedUserDto.Firstname);
@@ -217,14 +217,14 @@ public class UserServiceTest : IClassFixture<DataContextTest>
     [Fact]
     public async Task DeleteUser_Test()
     {
-        var appUserDto = CreateFakeAppUserDto("test@user.com", _context.UserId.ToString(), RoleEnum.User);
+        var appUserDto = CreateFakeAppUserDto("test@user.com", _context.User.Id.ToString(), RoleEnum.User);
         
-        var user = await _userService.DeleteUserById(_context.UserId.ToString(), appUserDto);
+        var user = await _userService.DeleteUserById(_context.User.Id.ToString(), appUserDto);
         Assert.NotNull(user);
         
-        var appAdminDto = CreateFakeAppUserDto("admin@gmail.com", _context.AdminId.ToString(), RoleEnum.Admin);
+        var appAdminDto = CreateFakeAppUserDto("admin@gmail.com", _context.Admin.Id.ToString(), RoleEnum.Admin);
         
-        var exception = await Assert.ThrowsAsync<HttpResponseException>(() =>  _userService.GetUserById(_context.UserId.ToString(), appAdminDto));
+        var exception = await Assert.ThrowsAsync<HttpResponseException>(() =>  _userService.GetUserById(_context.User.Id.ToString(), appAdminDto));
         Assert.True(exception.StatusCode.Equals(404));
         Assert.Equal(exception.Message, ErrorHelper.GetErrorMessage(ErrorMessageEnum.Sup404UserNotFound));
     }
