@@ -14,3 +14,7 @@ body{
   height: 100vh;
   padding: 2em;
 }
+
+a{
+  cursor: pointer;
+}
