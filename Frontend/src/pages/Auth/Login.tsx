@@ -13,7 +13,7 @@ export default function Login() {
         event.preventDefault();
         let connectUserDto: ConnectUserDto = new ConnectUserDto(email, password);
         try {
-            const jwt = (await axios.post('http://localhost:8080/login', connectUserDto)).data.response as string 
+            const jwt = (await axios.post('http://localhost:8080/api/login', connectUserDto)).data.response as string 
             localStorage.setItem('bearer', jwt);
             navigate('/');
         } catch (error) {
